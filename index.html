@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ContentGenius - AI Content Empire</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div id="root"></div>
+    
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+        
+        // Content Generation Engine
+        const generateBlogPost = (topic, tone) => {
+            const templates = {
+                professional: `Why ${topic} Matters for Your Business in 2026\n\nIn today's rapidly evolving digital landscape, ${topic} has become more crucial than ever. Businesses that leverage ${topic} effectively see 3x better results than those that don't.\n\nKey Benefits:\n1. Increased efficiency\n2. Cost savings\n3. Competitive advantage\n\nRead on to discover how to implement ${topic} in your organization.`,
+                casual: `The Ultimate Guide to ${topic} (No BS)\n\nLet me be real with you. ${topic} changed everything for me.\n\nI went from struggling to absolutely crushing it in 6 months.\n\nHere's what nobody tells you...\n\n[The real, unfiltered truth about ${topic}]`,
+                academic: `A Comprehensive Analysis of ${topic}: Evidence-Based Approaches\n\nAbstract: This paper examines the impact of ${topic} on modern business practices.\n\nIntroduction:\nThe integration of ${topic} represents a paradigm shift...`
+            };
+            return templates[tone] || templates.professional;
+        };
+
+        const generateSocialPosts = (topic) => {
+            return [
+                `🚀 Just discovered something amazing about ${topic}!\n\nThe results speak for themselves.\n\nWho else is implementing this? 👇`,
+                `💡 Hot take: ${topic} isn't just a trend—it's the future.\n\nHere's why the smartest companies are betting big on it... 🧵`,
+                `Real talk about ${topic}:\n\n❌ What most people do wrong\n✅ What actually works\n🎯 The 80/20 rule\n\nSave this post.`,
+                `Thread: How ${topic} changed my business 📈\n\n1/7 🧵👇`
+            ];
+        };
+
+        const generateEmailSequence = (topic, goal) => {
+            const sequences = {
+                onboarding: [
+                    { subject: `Welcome! Your ${topic} journey starts now`, body: `Hi there,\n\nWelcome to the community! Over the next week, I'll show you how to master ${topic}.\n\nLet's dive in...` },
+                    { subject: `Most people get ${topic} wrong (Day 2)`, body: `Quick question:\n\nWhat's your biggest challenge with ${topic}?\n\nHit reply and let me know...` },
+                    { subject: `The secret to ${topic} success`, body: `I see you're serious about ${topic}.\n\nHere's the insider knowledge most people pay $997 for...` }
+                ],
+                sales: [
+                    { subject: `${topic} holding you back?`, body: `Hi,\n\nI noticed you haven't started with ${topic} yet.\n\nHere's why that's costing you money...` },
+                    { subject: `Last chance: ${topic} solution`, body: `This is it.\n\nThe ${topic} solution you've been looking for.\n\nBut the doors close tonight...` }
+                ]
+            };
+            return sequences[goal] || sequences.onboarding;
+        };
+
+        const generateAdCopy = (topic, platform) => {
+            const ads = {
+                facebook: {
+                    headline: `Finally: A Better Way to Handle ${topic}`,
+                    body: `Tired of struggling with ${topic}? Join 10,000+ professionals who've found the solution. Get started FREE today.`,
+                    cta: `Get Started Free →`
+                },
+                google: {
+                    headline: `${topic} Solution - Trusted by Experts`,
+                    description: `Professional ${topic} tools. Try free for 14 days. No credit card required.`,
+                    cta: `Start Free Trial`
+                },
+                linkedin: {
+                    headline: `${topic}: The Strategy Top Performers Use`,
+                    body: `Discover how industry leaders are leveraging ${topic} to get ahead. Exclusive insights inside.`,
+                    cta: `Read Now`
+                }
+            };
+            return ads[platform] || ads.facebook;
+        };
+
+        const App = () => {
+            const [topic, setTopic] = useState('');
+            const [tone, setTone] = useState('professional');
+            const [results, setResults] = useState(null);
+            const [activeTab, setActiveTab] = useState('blog');
+            const [copied, setCopied] = useState(false);
+
+            const generateContent = () => {
+                if (!topic) return;
+                
+                const blogPost = generateBlogPost(topic, tone);
+                const socialPosts = generateSocialPosts(topic);
+                const emailSequence = generateEmailSequence(topic, 'onboarding');
+                const ads = {
+                    facebook: generateAdCopy(topic, 'facebook'),
+                    google: generateAdCopy(topic, 'google'),
+                    linkedin: generateAdCopy(topic, 'linkedin')
+                };
+                
+                setResults({ blogPost, socialPosts, emailSequence, ads });
+            };
+
+            const copyToClipboard = (text) => {
+                navigator.clipboard.writeText(text);
+                setCopied(true);
+                setTimeout(() => setCopied(false), 2000);
+            };
+
+            useEffect(() => {
+                if (typeof lucide !== 'undefined') {
+                    lucide.createIcons();
+                }
+            }, [results]);
+
+            return (
+                <div className="min-h-screen">
+                    {/* Header */}
+                    <header className="gradient-bg text-white py-16 px-4">
+                        <div className="max-w-4xl mx-auto text-center">
+                            <div className="text-6xl mb-4">🎨</div>
+                            <h1 className="text-5xl font-bold mb-4">ContentGenius</h1>
+                            <p className="text-xl text-purple-100 mb-2">AI Content Empire Generator</p>
+                            <p className="text-purple-200">Create entire marketing campaigns in seconds</p>
+                        </div>
+                    </header>
+
+                    <div className="max-w-5xl mx-auto px-4 py-8">
+                        {/* Input Section */}
+                        <div className="bg-white rounded-2xl shadow-xl p-8 mb-8">
+                            <h3 className="text-2xl font-bold text-gray-800 mb-6">What do you want to create content about?</h3>
+                            
+                            <div className="mb-6">
+                                <label className="block text-sm font-medium text-gray-700 mb-2">Topic/Product Name</label>
+                                <input
+                                    type="text"
+                                    value={topic}
+                                    onChange={(e) => setTopic(e.target.value)}
+                                    placeholder="e.g., AI Writing Tools, Vegan Meal Prep, Productivity Apps"
+                                    className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-purple-500 focus:border-transparent text-lg"
+                                />
+                            </div>
+
+                            <div className="mb-6">
+                                <label className="block text-sm font-medium text-gray-700 mb-2">Tone</label>
+                                <div className="flex gap-3">
+                                    {['professional', 'casual', 'academic'].map((t) => (
+                                        <button
+                                            key={t}
+                                            onClick={() => setTone(t)}
+                                            className={`px-4 py-2 rounded-lg font-medium capitalize transition-all ${
+                                                tone === t 
+                                                    ? 'bg-purple-600 text-white' 
+                                                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                            }`}
+                                        >
+                                            {t}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <button
+                                onClick={generateContent}
+                                disabled={!topic}
+                                className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold py-4 rounded-xl hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                            >
+                                🚀 Generate Content Empire
+                            </button>
+                        </div>
+
+                        {/* Results */}
+                        {results && (
+                            <div className="space-y-6">
+                                {/* Tabs */}
+                                <div className="bg-white rounded-xl shadow-lg p-2 flex flex-wrap gap-2">
+                                    {[
+                                        { id: 'blog', label: '📝 Blog Post', icon: 'file-text' },
+                                        { id: 'social', label: '📱 Social Media', icon: 'share-2' },
+                                        { id: 'email', label: '📧 Email Sequence', icon: 'mail' },
+                                        { id: 'ads', label: '🎯 Ad Copy', icon: 'target' }
+                                    ].map((tab) => (
+                                        <button
+                                            key={tab.id}
+                                            onClick={() => setActiveTab(tab.id)}
+                                            className={`px-4 py-2 rounded-lg font-medium transition-all ${
+                                                activeTab === tab.id
+                                                    ? 'bg-purple-100 text-purple-700'
+                                                    : 'text-gray-600 hover:bg-gray-100'
+                                            }`}
+                                        >
+                                            {tab.label}
+                                        </button>
+                                    ))}
+                                </div>
+
+                                {/* Content Display */}
+                                <div className="bg-white rounded-2xl shadow-xl p-6">
+                                    {activeTab === 'blog' && (
+                                        <div>
+                                            <div className="flex justify-between items-center mb-4">
+                                                <h3 className="text-xl font-bold text-gray-800">Blog Post</h3>
+                                                <button
+                                                    onClick={() => copyToClipboard(results.blogPost)}
+                                                    className="text-purple-600 hover:text-purple-700 font-medium"
+                                                >
+                                                    {copied ? '✓ Copied!' : '📋 Copy'}
+                                                </button>
+                                            </div>
+                                            <div className="bg-gray-50 p-6 rounded-xl whitespace-pre-wrap font-mono text-sm leading-relaxed">
+                                                {results.blogPost}
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {activeTab === 'social' && (
+                                        <div className="space-y-4">
+                                            <h3 className="text-xl font-bold text-gray-800 mb-4">Social Media Posts\u003c/h3>
+                                            {results.socialPosts.map((post, idx) => (
+                                                <div key={idx} className="bg-gray-50 p-4 rounded-xl">
+                                                    <p className="whitespace-pre-wrap text-gray-700">{post}</p>
+                                                    <button
+                                                        onClick={() => copyToClipboard(post)}
+                                                        className="text-purple-600 hover:text-purple-700 font-medium mt-2 text-sm"
+                                                    >
+                                                        📋 Copy Post
+                                                    </button>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+
+                                    {activeTab === 'email' && (
+                                        <div className="space-y-4">
+                                            <h3 className="text-xl font-bold text-gray-800 mb-4">Email Sequence\u003c/h3>
+                                            {results.emailSequence.map((email, idx) => (
+                                                <div key={idx} className="border border-gray-200 rounded-xl p-4">
+                                                    <p className="font-semibold text-gray-800 mb-2">Email {idx + 1}: {email.subject}</p>
+                                                    <p className="text-gray-600 text-sm whitespace-pre-wrap">{email.body}</p>
+                                                    <button
+                                                        onClick={() => copyToClipboard(`Subject: ${email.subject}\n\n${email.body}`)}
+                                                        className="text-purple-600 hover:text-purple-700 font-medium mt-2 text-sm"
+                                                    >
+                                                        📋 Copy Email
+                                                    </button>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+
+                                    {activeTab === 'ads' && (
+                                        <div className="space-y-4">
+                                            <h3 className="text-xl font-bold text-gray-800 mb-4">Ad Campaign\u003c/h3>
+                                            {Object.entries(results.ads).map(([platform, ad]) => (
+                                                <div key={platform} className="border border-gray-200 rounded-xl p-4 bg-gray-50">
+                                                    <p className="font-semibold text-purple-600 uppercase text-xs mb-2">{platform}</p>
+                                                    <p className="font-bold text-lg mb-2">{ad.headline}</p>
+                                                    <p className="text-gray-700 mb-2">{ad.body}</p>
+                                                    <span className="inline-block bg-blue-600 text-white px-4 py-1 rounded text-sm font-medium">{ad.cta}</span>
+                                                    <button
+                                                        onClick={() => copyToClipboard(`${ad.headline}\n\n${ad.body}\n\n${ad.cta}`)}
+                                                        className="text-purple-600 hover:text-purple-700 font-medium mt-2 text-sm block"
+                                                    >
+                                                        📋 Copy Ad
+                                                    </button>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* Premium CTA */}
+                                <div className="bg-gradient-to-r from-purple-600 to-indigo-600 rounded-2xl shadow-xl p-6 text-center text-white">
+                                    <h3 className="text-2xl font-bold mb-2">Get AI-Powered Content\u003c/h3>
+                                    <p className="mb-4">Unlock GPT-4 powered content generation, SEO optimization, and image creation</p>
+                                    <button className="bg-white text-purple-600 font-bold py-3 px-8 rounded-xl hover:shadow-lg">
+                                        Upgrade to Premium - $19/month
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Footer */}
+                    <footer className="text-center py-8 text-gray-500">
+                        <p>ContentGenius © 2024 • Built with ❤️ by Angel Army</p>
+                    </footer>
+                </div>
+            );
+        };
+
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+</body>
+</html>
